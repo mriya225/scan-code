@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <title>扫码结果</title>
+    <meta name="description" content=""/>
+    <meta name="keywords" content="">
+    <link rel="icon" href="favicon.ico" type="image">
+    <style>
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0 auto;
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: PingFangSC-Regular, sans-serif;
+        }
+
+        .container {
+            background-color: white;
+        }
+
+        .icon {
+            width: 140px;
+            height: 140px;
+            margin-top: 50px;
+        }
+
+        .name {
+            color: #1f2328;
+            font-weight: bold;
+            font-size: 27px;
+            margin-top: 36px;
+        }
+
+        .text {
+            color: #1f2328;
+            font-weight: bold;
+            font-size: 27px;
+            margin-top: 60px;
+        }
+
+        .time1 {
+            margin-top: 42px;
+            font-size: 27px;
+            font-weight: bold;
+            color: #91969c;
+        }
+
+        .time2{
+            font-size: 30px;
+            color: #f26565;
+            margin-top: 4px;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <img class="icon" src="./src/img/ok.png" alt="">
+    <div class="name">学生</div>
+    <div class="text" id="text"></div>
+    <div class="time1">本次扫码时间：</div>
+    <div class="time2" id="time2"></div>
+</div>
+
+<script>
+    Date.prototype.format = function (fmt) {
+        let o = {
+            // 月份
+            "M+": this.getMonth() + 1,
+            // 日
+            "d+": this.getDate(),
+            // 小时
+            "h+": this.getHours(),
+            // 分
+            "m+": this.getMinutes(),
+            // 秒
+            "s+": this.getSeconds(),
+            // 季度
+            "q+": Math.floor((this.getMonth() + 3) / 3),
+            // 毫秒
+            "S": this.getMilliseconds()
+        };
+        if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        }
+        for (let k in o) {
+            if (new RegExp("(" + k + ")").test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            }
+        }
+        return fmt;
+    }
+
+
+    /**
+     * 格式化时间
+     *
+     * @return {*}
+     */
+    function formatDateTime() {
+        return new Date().format("yyyy-MM-dd hh:mm:ss")
+    }
+
+
+    window.onload = function () {
+        const text = document.querySelector('#text');
+        const time2 = document.querySelector('#time2');
+
+        // 文字
+        const t_name = localStorage.getItem('name');
+        const t_enter = localStorage.getItem('enter') == "1" ? "一路平安" : "欢迎进入";
+        text.innerText = `${t_name}，验证成功，${t_enter}。`;
+
+        // 时间
+        time2.innerText = formatDateTime();
+
+        function setSecond() {
+            time2.innerText = formatDateTime();
+        }
+
+        setInterval(setSecond, 1000);
+    }
+</script>
+</body>
+</html>
